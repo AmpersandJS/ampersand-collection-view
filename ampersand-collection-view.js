@@ -1,7 +1,9 @@
 var _ = require('underscore');
 var BBEvents = require('backbone-events-standalone');
-var options = ['collection', 'el', 'viewOptions', 'view', 'filter', 'reverse'];
 var ampExtend = require('ampersand-class-extend');
+
+// options
+var options = ['collection', 'el', 'viewOptions', 'view', 'filter', 'reverse'];
 
 
 function CollectionView(spec) {
