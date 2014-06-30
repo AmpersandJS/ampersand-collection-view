@@ -57,11 +57,18 @@ _.extend(CollectionView.prototype, BBEvents, {
     },
     _insertView: function (view) {
         if (!view.insertSelf) {
+            var pos = this.collection.indexOf(view.model);
+            var modelToInsertBefore, viewToInsertBefore;
+
             if (this.reverse) {
-                this.el.insertBefore(view.el, this.el.firstChild);
+                modelToInsertBefore = this.collection.at(pos - 1);
             } else {
-                this.el.appendChild(view.el);
+                modelToInsertBefore = this.collection.at(pos + 1);
             }
+
+            viewToInsertBefore = this._getViewByModel(modelToInsertBefore);
+
+            this.el.insertBefore(view.el, viewToInsertBefore && viewToInsertBefore.el);
         }
     },
     _removeViewForModel: function (model) {

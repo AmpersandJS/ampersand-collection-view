@@ -118,6 +118,22 @@ test('adding to collection should work', function (t) {
     t.end();
 });
 
+test('adding at specific index should work', function (t) {
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView
+    });
+    cv.render();
+
+    coll.add({name: 'henrik', id: 4}, { at: 1 });
+    t.equal(cv.el.innerHTML, '<div id="_1">mary</div><div id="_4">henrik</div><div id="_2">sue</div><div id="_3">dave</div>');
+
+    t.end();
+});
+
 test('add', function (t) {
     var coll = new Collection(data);
     var div = document.createElement('div');
