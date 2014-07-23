@@ -11,7 +11,7 @@ function CollectionView(spec) {
     this.views = [];
     this.listenTo(this.collection, 'add', this._addViewForModel);
     this.listenTo(this.collection, 'remove', this._removeViewForModel);
-    this.listenTo(this.collection, 'move sort', this._renderAll);
+    this.listenTo(this.collection, 'move sort', this._rerenderAll);
     this.listenTo(this.collection, 'refresh reset', this._reset);
 }
 
@@ -40,7 +40,7 @@ _.extend(CollectionView.prototype, BBEvents, {
     _getOrCreateByModel: function (model) {
         return this._getViewByModel(model) || this._createViewForModel(model);
     },
-    _addViewForModel: function (model) {
+    _addViewForModel: function (model, collection, options) {
         var view = this._getViewByModel(model);
         var matches = this.filter ? this.filter(model) : true;
         if (!matches) {
@@ -53,9 +53,13 @@ _.extend(CollectionView.prototype, BBEvents, {
             view.renderedByParentView = true;
             view.render({containerEl: this.el});
         }
-        this._insertView(view);
+        if (options && options.rerender) {
+            this._insertView(view);
+        } else {
+            this._insertViewAtIndex(view);
+        }
     },
-    _insertView: function (view) {
+    _insertViewAtIndex: function (view) {
         if (!view.insertSelf) {
             var pos = this.collection.indexOf(view.model);
             var modelToInsertBefore, viewToInsertBefore;
@@ -69,6 +73,15 @@ _.extend(CollectionView.prototype, BBEvents, {
             viewToInsertBefore = this._getViewByModel(modelToInsertBefore);
 
             this.el.insertBefore(view.el, viewToInsertBefore && viewToInsertBefore.el);
+        }
+    },
+    _insertView: function (view) {
+        if (!view.insertSelf) {
+            if (this.reverse) {
+                this.el.insertBefore(view.el, this.el.firstChild);
+            } else {
+                this.el.appendChild(view.el);
+            }
         }
     },
     _removeViewForModel: function (model) {
@@ -93,6 +106,11 @@ _.extend(CollectionView.prototype, BBEvents, {
     },
     _renderAll: function () {
         this.collection.each(this._addViewForModel, this);
+    },
+    _rerenderAll: function (collection, options) {
+        this.collection.each(function (model) {
+            this._addViewForModel(model, this, _.extend(options, {rerender: true}));
+        }, this);
     },
     _reset: function () {
         var newViews = [];

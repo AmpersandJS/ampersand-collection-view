@@ -8,14 +8,14 @@ var CollectionView = require('../ampersand-collection-view');
 
 // test data
 var data = [
-    {id: 1, name: 'mary'},
-    {id: 2, name: 'sue'},
-    {id: 3, name: 'dave'}
+    {id: 1, name: 'mary', age: 20},
+    {id: 2, name: 'sue', age: 25},
+    {id: 3, name: 'dave', age: 30}
 ];
 
 // item model
 var Person = AmpModel.extend({
-    props: {id: 'number', name: 'string'}
+    props: {id: 'number', name: 'string', age: 'number'}
 });
 
 // collection for that model
@@ -177,7 +177,8 @@ test('reset', function (t) {
     t.end();
 });
 
-test('sort', function (t) {
+test('sort and resort', function (t) {
+    var domIds = [];
     var coll = new Collection(data);
     var div = document.createElement('div');
     var view = new CollectionView({
@@ -186,16 +187,78 @@ test('sort', function (t) {
         view: ItemView
     });
     view.render();
+
+    // Sort by name
     view.collection.comparator = function (model) {
         return model.get('name');
     };
     view.collection.sort();
+
+    // All elements rendered and in order of name
     t.equal(numberRendered(view), view.collection.length);
-    var domIds = [];
+    domIds = [];
     getRendered(view).forEach(function (el) {
         domIds.push(Number(el.id.slice(1)));
     });
     t.deepEqual(domIds, [3, 1, 2]);
+
+    // Sort by age
+    view.collection.comparator = function (model) {
+        return model.get('age');
+    };
+    view.collection.sort();
+
+    // All elements rendered and in order of name
+    t.equal(numberRendered(view), view.collection.length);
+    domIds = [];
+    getRendered(view).forEach(function (el) {
+        domIds.push(Number(el.id.slice(1)));
+    });
+    t.deepEqual(domIds, [1, 2, 3]);
+
+    t.end();
+});
+
+test('sort and resort reversed', function (t) {
+    var domIds = [];
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var view = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        reverse: true
+    });
+    view.render();
+
+    // Sort by name
+    view.collection.comparator = function (model) {
+        return model.get('name');
+    };
+    view.collection.sort();
+
+    // All elements rendered and in order of name
+    t.equal(numberRendered(view), view.collection.length);
+    domIds = [];
+    getRendered(view).forEach(function (el) {
+        domIds.push(Number(el.id.slice(1)));
+    });
+    t.deepEqual(domIds, [2, 1, 3]);
+
+    // Sort by age
+    view.collection.comparator = function (model) {
+        return model.get('age');
+    };
+    view.collection.sort();
+
+    // All elements rendered and in order of name
+    t.equal(numberRendered(view), view.collection.length);
+    domIds = [];
+    getRendered(view).forEach(function (el) {
+        domIds.push(Number(el.id.slice(1)));
+    });
+    t.deepEqual(domIds, [3, 2, 1]);
+
     t.end();
 });
 
