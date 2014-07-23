@@ -219,6 +219,49 @@ test('sort and resort', function (t) {
     t.end();
 });
 
+test('sort and resort reversed', function (t) {
+    var domIds = [];
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var view = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        reverse: true
+    });
+    view.render();
+
+    // Sort by name
+    view.collection.comparator = function (model) {
+        return model.get('name');
+    };
+    view.collection.sort();
+
+    // All elements rendered and in order of name
+    t.equal(numberRendered(view), view.collection.length);
+    domIds = [];
+    getRendered(view).forEach(function (el) {
+        domIds.push(Number(el.id.slice(1)));
+    });
+    t.deepEqual(domIds, [2, 1, 3]);
+
+    // Sort by age
+    view.collection.comparator = function (model) {
+        return model.get('age');
+    };
+    view.collection.sort();
+
+    // All elements rendered and in order of name
+    t.equal(numberRendered(view), view.collection.length);
+    domIds = [];
+    getRendered(view).forEach(function (el) {
+        domIds.push(Number(el.id.slice(1)));
+    });
+    t.deepEqual(domIds, [3, 2, 1]);
+
+    t.end();
+});
+
 test('animateRemove', function (t) {
     var coll = new Collection(data);
     var div = document.createElement('div');
