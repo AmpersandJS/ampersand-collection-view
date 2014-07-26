@@ -108,6 +108,7 @@ _.extend(CollectionView.prototype, BBEvents, {
         this.collection.each(this._addViewForModel, this);
     },
     _rerenderAll: function (collection, options) {
+        options = options || {};
         this.collection.each(function (model) {
             this._addViewForModel(model, this, _.extend(options, {rerender: true}));
         }, this);
