@@ -11,7 +11,7 @@ function CollectionView(spec) {
     this.views = [];
     this.listenTo(this.collection, 'add', this._addViewForModel);
     this.listenTo(this.collection, 'remove', this._removeViewForModel);
-    this.listenTo(this.collection, 'move sort', this._rerenderAll);
+    this.listenTo(this.collection, 'sort', this._rerenderAll);
     this.listenTo(this.collection, 'refresh reset', this._reset);
 }
 
