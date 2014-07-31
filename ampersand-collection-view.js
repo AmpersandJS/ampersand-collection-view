@@ -36,6 +36,7 @@ _.extend(CollectionView.prototype, BBEvents, {
         view.parent = this;
         view.renderedByParentView = true;
         view.render();
+        return view;
     },
     _getOrCreateByModel: function (model) {
         return this._getViewByModel(model) || this._createViewForModel(model);
@@ -114,15 +115,15 @@ _.extend(CollectionView.prototype, BBEvents, {
         }, this);
     },
     _reset: function () {
-        var newViews = [];
-        // get any existing views we may have cached
-        if (this.views.length) {
-            newViews = this.collection.map(this._getOrCreateByModel);
-        }
+        var newViews = this.collection.map(this._getOrCreateByModel, this);
+
+        //Remove existing views from the ui
         var toRemove = _.difference(this.views, newViews);
         toRemove.forEach(this._removeView, this);
+
+        //Rerender the full list with the new views
         this.views = newViews;
-        this.views.forEach(this._insertView, this);
+        this._rerenderAll();
     }
 });
 

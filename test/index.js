@@ -171,9 +171,19 @@ test('reset', function (t) {
         view: ItemView
     });
     view.render();
+    t.equal(numberRendered(view), 3);
+
     view.collection.reset();
     t.equal(numberRendered(view), view.collection.length);
     t.equal(numberRendered(view), 0);
+
+    view.collection.reset([
+        {id: 10, name: 'mary', age: 20},
+    ]);
+    t.equal(view.collection.length, 1);
+    t.equal(view.views.length, 1);
+    t.equal(numberRendered(view), 1);
+
     t.end();
 });
 
