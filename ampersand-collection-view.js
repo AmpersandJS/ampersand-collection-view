@@ -84,14 +84,8 @@ _.extend(CollectionView.prototype, BBEvents, {
     },
     _insertView: function (view) {
         if (!view.insertSelf) {
-            if (this.reverse) {
-                // FIX IE bug (https://developer.mozilla.org/en-US/docs/Web/API/Node.insertBefore)
-                // "In Internet Explorer an undefined value as referenceElement will throw errors, while in rest of the modern browsers, this works fine."
-                if(this.el.firstChild) {
-                    this.el.insertBefore(view.el, this.el.firstChild);
-                } else {
-                    this.el.appendChild(view.el);
-                }
+            if (this.reverse && this.el.firstChild) {
+                this.el.insertBefore(view.el, this.el.firstChild);
             } else {
                 this.el.appendChild(view.el);
             }
