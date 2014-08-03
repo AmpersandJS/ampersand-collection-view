@@ -15,7 +15,15 @@ var data = [
 
 // item model
 var Person = AmpModel.extend({
-    props: {id: 'number', name: 'string', age: 'number'}
+    props: {id: 'number', name: 'string', age: 'number'},
+    derived: {
+        isStillYoung: {
+            deps: ['age'],
+            fn: function () {
+                return this.age <= 20;
+            }
+        }
+    }
 });
 
 // collection for that model
@@ -38,6 +46,13 @@ var ItemView = AmpView.extend({
         this.renderWithTemplate();
         this.el.id = '_' + this.model.id;
         return this;
+    }
+});
+
+var AlternativeItemView = AmpView.extend({
+    template: '<span></span>',
+    bindings: {
+        'model.name': ''
     }
 });
 
@@ -73,6 +88,26 @@ test('should render all when calling `render`', function (t) {
     t.equal(cv.el.innerHTML, '');
     cv.render();
     t.equal(cv.el.innerHTML, '<div id="_1">mary</div><div id="_2">sue</div><div id="_3">dave</div>');
+    t.end();
+});
+
+test('should render different view based on a given expression', function (t) {
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: function (options) {
+            if (options.model.isStillYoung) {
+                return new AlternativeItemView(options);
+            }
+
+            return new ItemView(options);
+        }
+    });
+    t.equal(cv.el.innerHTML, '');
+    cv.render();
+    t.equal(cv.el.innerHTML, '<span>mary</span><div id="_2">sue</div><div id="_3">dave</div>');
     t.end();
 });
 
