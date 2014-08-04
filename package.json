@@ -1,7 +1,7 @@
 {
   "name": "ampersand-collection-view",
   "description": "Renders a collection with one view per model within an element in a way that cleans up and unbinds all views when removed.",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "bugs": {
     "url": "https://github.com/HenrikJoreteg/ampersand-collection-view/issues"
