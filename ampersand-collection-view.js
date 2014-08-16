@@ -7,6 +7,15 @@ var options = ['collection', 'el', 'viewOptions', 'view', 'filter', 'reverse'];
 
 
 function CollectionView(spec) {
+    if (!spec) {
+        throw new ReferenceError('Collection view missing required parameters: collection, el');
+    }
+    if (!spec.collection) {
+        throw new ReferenceError('Collection view requires a collection');
+    }
+    if (!spec.el) {
+        throw new ReferenceError('Collection view requires an el');
+    }
     _.extend(this, _.pick(spec, options));
     this.views = [];
     this.listenTo(this.collection, 'add', this._addViewForModel);
