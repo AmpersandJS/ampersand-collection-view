@@ -393,3 +393,18 @@ test('child view can choose to insert self', function (t) {
     t.end();
 });
 
+test('helpful exceptions for missing parameters', function (t) {
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    t.throws(function noParams() {
+        new CollectionView();
+    }, ReferenceError, 'Collection view missing required parameters: collection, el');
+    t.throws(function noCollection() {
+        new CollectionView({ el: div });
+    }, ReferenceError, 'Collection view requires a collection');
+    t.throws(function noCollection() {
+        new CollectionView({ collection: coll });
+    }, ReferenceError, 'Collection view requires an el');
+    t.end();
+});
+
