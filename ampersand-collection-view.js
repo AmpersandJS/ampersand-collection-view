@@ -142,6 +142,6 @@ _.extend(CollectionView.prototype, BBEvents, {
     }
 });
 
-CollectionView.prototype.extend = ampExtend;
+CollectionView.extend = ampExtend;
 
 module.exports = CollectionView;
