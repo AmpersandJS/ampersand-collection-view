@@ -64,7 +64,7 @@ var MainView = AmpView.extend({
     },
     render: function (opts) {
         this.el.innerHTML = '<ul></ul>';
-        this.renderCollection(this.collection, ItemView, this.get('ul'), opts);
+        this.renderCollection(this.collection, ItemView, this.query('ul'), opts);
         return this;
     }
 });
