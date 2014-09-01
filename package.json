@@ -4,7 +4,7 @@
   "version": "1.1.0",
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "bugs": {
-    "url": "https://github.com/HenrikJoreteg/ampersand-collection-view/issues"
+    "url": "https://github.com/AmpersandJS/ampersand-collection-view/issues"
   },
   "dependencies": {
     "ampersand-class-extend": "^1.0.0",
@@ -33,7 +33,7 @@
   "main": "ampersand-collection-view.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/HenrikJoreteg/ampersand-collection-view"
+    "url": "git://github.com/AmpersandJS/ampersand-collection-view"
   },
   "scripts": {
     "start": "run-browser test/index.js",
