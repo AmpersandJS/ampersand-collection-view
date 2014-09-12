@@ -3,7 +3,7 @@ var BBEvents = require('backbone-events-standalone');
 var ampExtend = require('ampersand-class-extend');
 
 // options
-var options = ['collection', 'el', 'viewOptions', 'view', 'filter', 'reverse'];
+var options = ['collection', 'el', 'viewOptions', 'view', 'filter', 'reverse', 'parent'];
 
 
 function CollectionView(spec) {

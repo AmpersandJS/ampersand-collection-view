@@ -408,3 +408,17 @@ test('helpful exceptions for missing parameters', function (t) {
     t.end();
 });
 
+test('should let you pass in `parent`', function (t) {
+    var coll = new Collection(data);
+    var parent = {};
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        parent: parent
+    });
+    t.equal(parent, cv.parent);
+    t.end();
+});
+
