@@ -13,7 +13,7 @@ function CollectionView(spec) {
     if (!spec.collection) {
         throw new ReferenceError('Collection view requires a collection');
     }
-    if (!spec.el) {
+    if (!spec.el && !this.insertSelf) {
         throw new ReferenceError('Collection view requires an el');
     }
     _.extend(this, _.pick(spec, options));
