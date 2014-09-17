@@ -408,6 +408,16 @@ test('helpful exceptions for missing parameters', function (t) {
     t.end();
 });
 
+test('no exception on missing el if insertSelf is true', function (t) {
+    var coll = new Collection(data);
+    var SelfRenderingView = CollectionView.extend({
+        insertSelf: true
+    });
+    var view = new SelfRenderingView({collection: coll});
+    t.ok(view);
+    t.end();
+});
+
 test('should let you pass in `parent`', function (t) {
     var coll = new Collection(data);
     var parent = {};
