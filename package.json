@@ -9,7 +9,11 @@
   "dependencies": {
     "ampersand-class-extend": "^1.0.0",
     "backbone-events-standalone": "^0.2.2",
-    "underscore": "1.6.0"
+    "lodash.assign": "^2.4.1",
+    "lodash.difference": "^2.4.1",
+    "lodash.find": "^2.4.1",
+    "lodash.invoke": "^2.4.1",
+    "lodash.pick": "^2.4.1"
   },
   "devDependencies": {
     "ampersand-collection": "~1.3.1",
