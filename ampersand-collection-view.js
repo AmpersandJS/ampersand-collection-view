@@ -1,4 +1,10 @@
-var _ = require('underscore');
+var _ = {
+    difference: require('lodash.difference'),
+    extend: require('lodash.assign'),
+    find: require('lodash.find'),
+    invoke: require('lodash.invoke'),
+    pick: require('lodash.pick')
+};
 var BBEvents = require('backbone-events-standalone');
 var ampExtend = require('ampersand-class-extend');
 
@@ -40,7 +46,7 @@ _.extend(CollectionView.prototype, BBEvents, {
         });
     },
     _createViewForModel: function (model) {
-        var view = new this.view(_({model: model, collection: this.collection}).extend(this.viewOptions));
+        var view = new this.view(_.extend({model: model, collection: this.collection}, this.viewOptions));
         this.views.push(view);
         view.parent = this;
         view.renderedByParentView = true;
@@ -57,7 +63,7 @@ _.extend(CollectionView.prototype, BBEvents, {
             return;
         }
         if (!view) {
-            view = new this.view(_({model: model, collection: this.collection}).extend(this.viewOptions));
+            view = new this.view(_.extend({model: model, collection: this.collection}, this.viewOptions));
             this.views.push(view);
             view.parent = this;
             view.renderedByParentView = true;
