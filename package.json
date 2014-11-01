@@ -3,11 +3,17 @@
   "description": "Renders a collection with one view per model within an element in a way that cleans up and unbinds all views when removed.",
   "version": "1.1.2",
   "author": "Henrik Joreteg <henrik@andyet.net>",
+  "browserify": {
+    "transform": [
+      "ampersand-version"
+    ]
+  },
   "bugs": {
     "url": "https://github.com/AmpersandJS/ampersand-collection-view/issues"
   },
   "dependencies": {
     "ampersand-class-extend": "^1.0.0",
+    "ampersand-version": "^1.0.0",
     "backbone-events-standalone": "^0.2.2",
     "underscore": "1.6.0"
   },
