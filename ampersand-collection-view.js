@@ -40,30 +40,23 @@ _.extend(CollectionView.prototype, BBEvents, {
             return model === view.model;
         });
     },
-    _createViewForModel: function (model) {
+    _createViewForModel: function (model, renderOpts) {
         var view = new this.view(_({model: model, collection: this.collection}).extend(this.viewOptions));
         this.views.push(view);
         view.parent = this;
         view.renderedByParentView = true;
-        view.render();
+        view.render(renderOpts);
         return view;
     },
-    _getOrCreateByModel: function (model) {
-        return this._getViewByModel(model) || this._createViewForModel(model);
+    _getOrCreateByModel: function (model, renderOpts) {
+        return this._getViewByModel(model) || this._createViewForModel(model, renderOpts);
     },
     _addViewForModel: function (model, collection, options) {
-        var view = this._getViewByModel(model);
         var matches = this.filter ? this.filter(model) : true;
         if (!matches) {
             return;
         }
-        if (!view) {
-            view = new this.view(_({model: model, collection: this.collection}).extend(this.viewOptions));
-            this.views.push(view);
-            view.parent = this;
-            view.renderedByParentView = true;
-            view.render({containerEl: this.el});
-        }
+        var view = this._getOrCreateByModel(model, {containerEl: this.el});
         if (options && options.rerender) {
             this._insertView(view);
         } else {
