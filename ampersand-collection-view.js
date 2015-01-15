@@ -4,7 +4,7 @@ var BBEvents = require('backbone-events-standalone');
 var ampExtend = require('ampersand-class-extend');
 
 // options
-var options = ['collection', 'el', 'viewOptions', 'view', 'filter', 'reverse', 'parent'];
+var options = ['collection', 'el', 'viewOptions', 'view', 'emptyView', 'filter', 'reverse', 'parent'];
 
 
 function CollectionView(spec) {
@@ -56,6 +56,9 @@ _.extend(CollectionView.prototype, BBEvents, {
         if (!matches) {
             return;
         }
+        if (this.renderedEmptyView) {
+            this.renderedEmptyView.remove();
+        }
         var view = this._getOrCreateByModel(model, {containerEl: this.el});
         if (options && options.rerender) {
             this._insertView(view);
@@ -105,6 +108,9 @@ _.extend(CollectionView.prototype, BBEvents, {
             // to give user option of gracefully destroying.
             view = this.views.splice(index, 1)[0];
             this._removeView(view);
+            if (this.views.length === 0) {
+                this._renderEmptyView();
+            }
         }
     },
     _removeView: function (view) {
@@ -116,12 +122,21 @@ _.extend(CollectionView.prototype, BBEvents, {
     },
     _renderAll: function () {
         this.collection.each(this._addViewForModel, this);
+        if (this.views.length === 0) {
+            this._renderEmptyView();
+        }
     },
     _rerenderAll: function (collection, options) {
         options = options || {};
         this.collection.each(function (model) {
             this._addViewForModel(model, this, _.extend(options, {rerender: true}));
         }, this);
+    },
+    _renderEmptyView: function() {
+        if (this.emptyView) {
+            var view = this.renderedEmptyView = new this.emptyView();
+            this.el.appendChild(view.render().el);
+        }
     },
     _reset: function () {
         var newViews = this.collection.map(this._getOrCreateByModel, this);
@@ -133,6 +148,9 @@ _.extend(CollectionView.prototype, BBEvents, {
         //Rerender the full list with the new views
         this.views = newViews;
         this._rerenderAll();
+        if (this.views.length === 0) {
+            this._renderEmptyView();
+        }
     }
 });
 

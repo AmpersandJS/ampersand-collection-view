@@ -56,6 +56,15 @@ var AlternativeItemView = AmpView.extend({
     }
 });
 
+var SelfRenderingView = AmpView.extend({
+    insertSelf: true,
+    render: function() {}
+});
+
+var EmptyView = AmpView.extend({
+    template: '<section>tumbleweed...</section>',
+});
+
 var MainView = AmpView.extend({
     initialize: function () {
         this.el = document.createElement('div');
@@ -380,16 +389,16 @@ test('cleanup', function (t) {
 });
 
 test('child view can choose to insert self', function (t) {
-    var view = new MainView();
-    ItemView.prototype.insertSelf = true;
-    ItemView.prototype.render = function (extraInfo) {
-        t.ok(extraInfo.containerEl);
-        this.renderWithTemplate();
-    };
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var view = new CollectionView({
+        el: div,
+        collection: coll,
+        view: SelfRenderingView,
+    });
 
     view.render();
     t.equal(numberRendered(view), 0, 'Parent should not have rendered anything');
-    view.remove();
     t.end();
 });
 
@@ -432,3 +441,49 @@ test('should let you pass in `parent`', function (t) {
     t.end();
 });
 
+test('should use emptyView when collection is empty', function(t) {
+    var coll = new Collection([]);
+    var div = document.createElement('div');
+    var view = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        emptyView: EmptyView
+    });
+
+    view.render();
+    t.equal(view.el.innerHTML, '<section>tumbleweed...</section>');
+    t.end();
+});
+
+test('should remove emptyView when item is added to collection', function(t) {
+    var coll = new Collection([]);
+    var div = document.createElement('div');
+    var view = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        emptyView: EmptyView
+    });
+
+    view.render();
+    coll.add(data[0]);
+    t.equal(view.el.innerHTML, '<div id="_1">mary</div>');
+    t.end();
+});
+
+test('should use emptyView when last item is removed from collection', function(t) {
+    var coll = new Collection(data[0]);
+    var div = document.createElement('div');
+    var view = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        emptyView: EmptyView
+    });
+
+    view.render();
+    coll.remove(coll.at(0));
+    t.equal(view.el.innerHTML, '<section>tumbleweed...</section>');
+    t.end();
+});
