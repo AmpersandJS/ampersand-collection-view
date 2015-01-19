@@ -487,3 +487,39 @@ test('should use emptyView when last item is removed from collection', function(
     t.equal(view.el.innerHTML, '<section>tumbleweed...</section>');
     t.end();
 });
+
+test('should render emptyView only once after resetting an empty collection to an empty collection', function(t) {
+    var coll = new Collection([]);
+    var div = document.createElement('div');
+    var view = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        emptyView: EmptyView
+    });
+
+    view.render();
+    t.equal(view.el.innerHTML, '<section>tumbleweed...</section>');
+    coll.reset();
+    t.equal(view.el.innerHTML, '<section>tumbleweed...</section>');
+    t.end();
+});
+
+test('should render emptyView after adding an item to an empty collection and resetting it to an empty collection again', function(t) {
+    var coll = new Collection([]);
+    var div = document.createElement('div');
+    var view = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        emptyView: EmptyView
+    });
+
+    view.render();
+    t.equal(view.el.innerHTML, '<section>tumbleweed...</section>');
+    coll.add(data[0]);
+    t.equal(view.el.innerHTML, '<div id="_1">mary</div>');
+    coll.reset();
+    t.equal(view.el.innerHTML, '<section>tumbleweed...</section>');
+    t.end();
+});

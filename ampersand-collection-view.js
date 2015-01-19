@@ -58,6 +58,7 @@ _.extend(CollectionView.prototype, BBEvents, {
         }
         if (this.renderedEmptyView) {
             this.renderedEmptyView.remove();
+            delete this.renderedEmptyView;
         }
         var view = this._getOrCreateByModel(model, {containerEl: this.el});
         if (options && options.rerender) {
@@ -133,7 +134,7 @@ _.extend(CollectionView.prototype, BBEvents, {
         }, this);
     },
     _renderEmptyView: function() {
-        if (this.emptyView) {
+        if (this.emptyView && !this.renderedEmptyView) {
             var view = this.renderedEmptyView = new this.emptyView();
             this.el.appendChild(view.render().el);
         }
