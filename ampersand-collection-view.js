@@ -135,7 +135,7 @@ _.extend(CollectionView.prototype, BBEvents, {
     },
     _renderEmptyView: function() {
         if (this.emptyView && !this.renderedEmptyView) {
-            var view = this.renderedEmptyView = new this.emptyView();
+            var view = this.renderedEmptyView = new this.emptyView({parent: this});
             this.el.appendChild(view.render().el);
         }
     },
