@@ -41,9 +41,8 @@ _.extend(CollectionView.prototype, BBEvents, {
         });
     },
     _createViewForModel: function (model, renderOpts) {
-        var view = new this.view(_({model: model, collection: this.collection}).extend(this.viewOptions));
+        var view = new this.view(_({model: model, collection: this.collection}).extend(this.viewOptions, {parent: this}));
         this.views.push(view);
-        view.parent = this;
         view.renderedByParentView = true;
         view.render(renderOpts);
         return view;

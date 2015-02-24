@@ -524,6 +524,29 @@ test('should render emptyView after adding an item to an empty collection and re
     t.end();
 });
 
+test('should set `parent` on child views', function(t) {
+    t.plan(data.length * 2);
+
+    var TestItemView = ItemView.extend({
+        initialize: function(attrs) {
+            ItemView.prototype.initialize.call(this, attrs);
+            t.equal(this.parent, cv);
+        }
+    });
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: TestItemView
+    });
+
+    cv.render();
+    cv.views.forEach(function(view) {
+      t.equal(view.parent, cv);
+    });
+});
+
 test('should set `parent` on emptyView', function(t) {
     t.plan(2);
 
