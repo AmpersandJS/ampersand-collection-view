@@ -525,7 +525,7 @@ test('should render emptyView after adding an item to an empty collection and re
 });
 
 test('should set `parent` on child views', function(t) {
-    t.plan(data.length * 2);
+    t.plan(6);
 
     var TestItemView = ItemView.extend({
         initialize: function(attrs) {
