@@ -1,5 +1,9 @@
 /*$AMPERSAND_VERSION*/
-var _ = require('underscore');
+var assign = require('lodash.assign');
+var invoke = require('lodash.invoke');
+var pick = require('lodash.pick');
+var find = require('lodash.find');
+var difference = require('lodash.difference');
 var BBEvents = require('backbone-events-standalone');
 var ampExtend = require('ampersand-class-extend');
 
@@ -17,7 +21,7 @@ function CollectionView(spec) {
     if (!spec.el && !this.insertSelf) {
         throw new ReferenceError('Collection view requires an el');
     }
-    _.extend(this, _.pick(spec, options));
+    assign(this, pick(spec, options));
     this.views = [];
     this.listenTo(this.collection, 'add', this._addViewForModel);
     this.listenTo(this.collection, 'remove', this._removeViewForModel);
@@ -25,23 +29,24 @@ function CollectionView(spec) {
     this.listenTo(this.collection, 'refresh reset', this._reset);
 }
 
-_.extend(CollectionView.prototype, BBEvents, {
+assign(CollectionView.prototype, BBEvents, {
     // for view contract compliance
     render: function () {
         this._renderAll();
         return this;
     },
     remove: function () {
-        _.invoke(this.views, 'remove');
+        invoke(this.views, 'remove');
         this.stopListening();
     },
     _getViewByModel: function (model) {
-        return _.find(this.views, function (view) {
+        return find(this.views, function (view) {
             return model === view.model;
         });
     },
     _createViewForModel: function (model, renderOpts) {
-        var view = new this.view(_({model: model, collection: this.collection}).extend(this.viewOptions));
+        var defaultViewOptions = {model: model, collection: this.collection};
+        var view = new this.view(assign(defaultViewOptions, this.viewOptions));
         this.views.push(view);
         view.parent = this;
         view.renderedByParentView = true;
@@ -130,7 +135,7 @@ _.extend(CollectionView.prototype, BBEvents, {
     _rerenderAll: function (collection, options) {
         options = options || {};
         this.collection.each(function (model) {
-            this._addViewForModel(model, this, _.extend(options, {rerender: true}));
+            this._addViewForModel(model, this, assign(options, {rerender: true}));
         }, this);
     },
     _renderEmptyView: function() {
@@ -143,7 +148,7 @@ _.extend(CollectionView.prototype, BBEvents, {
         var newViews = this.collection.map(this._getOrCreateByModel, this);
 
         //Remove existing views from the ui
-        var toRemove = _.difference(this.views, newViews);
+        var toRemove = difference(this.views, newViews);
         toRemove.forEach(this._removeView, this);
 
         //Rerender the full list with the new views
