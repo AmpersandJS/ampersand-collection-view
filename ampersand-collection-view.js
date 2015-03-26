@@ -45,7 +45,7 @@ assign(CollectionView.prototype, BBEvents, {
         });
     },
     _createViewForModel: function (model, renderOpts) {
-	    var defaultViewOptions = {model: model, collection: this.collection};
+        var defaultViewOptions = {model: model, collection: this.collection};
         var view = new this.view(assign(defaultViewOptions, this.viewOptions));
         this.views.push(view);
         view.parent = this;
