@@ -4,7 +4,7 @@ var invoke = require('lodash.invoke');
 var pick = require('lodash.pick');
 var find = require('lodash.find');
 var difference = require('lodash.difference');
-var BBEvents = require('backbone-events-standalone');
+var Events = require('ampersand-events');
 var ampExtend = require('ampersand-class-extend');
 
 // options
@@ -29,7 +29,7 @@ function CollectionView(spec) {
     this.listenTo(this.collection, 'refresh reset', this._reset);
 }
 
-assign(CollectionView.prototype, BBEvents, {
+assign(CollectionView.prototype, Events, {
     // for view contract compliance
     render: function () {
         this._renderAll();
