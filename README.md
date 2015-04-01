@@ -16,6 +16,11 @@ npm install ampersand-collection-view
 
 [![testling badge](https://ci.testling.com/AmpersandJS/ampersand-collection-view.png)](https://ci.testling.com/AmpersandJS/ampersand-collection-view)
 
+## API Reference
+
+### views
+Exposes an array of views contained within the collection view.  This is a *raw array*, not a collection.
+
 ## credits
 
 Written by [@HenrikJoreteg](http://twitter.com/henrikjoreteg).
