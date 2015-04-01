@@ -523,3 +523,48 @@ test('should render emptyView after adding an item to an empty collection and re
     t.equal(view.el.innerHTML, '<section>tumbleweed...</section>');
     t.end();
 });
+
+test('should set `parent` on child views', function(t) {
+    t.plan(6);
+
+    var TestItemView = ItemView.extend({
+        initialize: function(attrs) {
+            ItemView.prototype.initialize.call(this, attrs);
+            t.equal(this.parent, cv);
+        }
+    });
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: TestItemView
+    });
+
+    cv.render();
+    cv.views.forEach(function(view) {
+      t.equal(view.parent, cv);
+    });
+});
+
+test('should set `parent` on emptyView', function(t) {
+    t.plan(2);
+
+    var TestEmptyView = EmptyView.extend({
+        initialize: function(attrs) {
+            EmptyView.prototype.initialize.call(this, attrs);
+            t.equal(this.parent, cv);
+        }
+    });
+    var coll = new Collection([]);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView,
+        emptyView: TestEmptyView
+    });
+
+    cv.render();
+    t.equal(cv.renderedEmptyView.parent, cv);
+});

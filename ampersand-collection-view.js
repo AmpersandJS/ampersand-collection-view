@@ -45,10 +45,9 @@ assign(CollectionView.prototype, Events, {
         });
     },
     _createViewForModel: function (model, renderOpts) {
-        var defaultViewOptions = {model: model, collection: this.collection};
+        var defaultViewOptions = {model: model, collection: this.collection, parent: this};
         var view = new this.view(assign(defaultViewOptions, this.viewOptions));
         this.views.push(view);
-        view.parent = this;
         view.renderedByParentView = true;
         view.render(renderOpts);
         return view;
@@ -140,7 +139,7 @@ assign(CollectionView.prototype, Events, {
     },
     _renderEmptyView: function() {
         if (this.emptyView && !this.renderedEmptyView) {
-            var view = this.renderedEmptyView = new this.emptyView();
+            var view = this.renderedEmptyView = new this.emptyView({parent: this});
             this.el.appendChild(view.render().el);
         }
     },
