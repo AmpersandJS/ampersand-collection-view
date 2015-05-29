@@ -579,7 +579,7 @@ test('adding to collection should trigger addViewForModel after appending', func
     });
     cv.render();
 
-    cv.on('addViewForModel', function (view) {
+    cv.on('model-view:added', function (view) {
         t.equal(view.model.name, 'henrik');
         t.ok(/henrik/.test(cv.el.textContent), 
             'expect ' + cv.el.textContent + ' to match /henrik/');
@@ -602,7 +602,7 @@ test('removing from collection should trigger removeViewForModel after removal',
     var firstView = cv.views[0];
     var firstNamePattern = new RegExp(firstView.model.name); 
 
-    cv.on('removeViewForModel', function (view) {
+    cv.on('model-view:removed', function (view) {
         t.equal(view.model.name, firstView.model.name);
         t.notOk(firstNamePattern.test(cv.el.textContent), 
             'expect ' + cv.el.textContent + ' not to match ' + firstNamePattern);
