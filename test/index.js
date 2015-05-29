@@ -578,8 +578,6 @@ test('adding to collection should trigger addViewForModel', function (t) {
         view: ItemView
     });
     cv.render();
-    var firstView = cv.views[0];
-    var firstEl = firstView && firstView.el;
 
     cv.on('addViewForModel', function (view) {
         t.equal(view.model.name, 'henrik');
