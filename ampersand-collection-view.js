@@ -70,6 +70,7 @@ assign(CollectionView.prototype, Events, {
         } else {
             this._insertViewAtIndex(view);
         }
+        this.trigger('addViewForModel', view);
     },
     _insertViewAtIndex: function (view) {
         if (!view.insertSelf) {
@@ -117,6 +118,7 @@ assign(CollectionView.prototype, Events, {
                 this._renderEmptyView();
             }
         }
+        this.trigger('removeViewForModel', view);
     },
     _removeView: function (view) {
         if (view.animateRemove) {

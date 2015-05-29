@@ -568,3 +568,43 @@ test('should set `parent` on emptyView', function(t) {
     cv.render();
     t.equal(cv.renderedEmptyView.parent, cv);
 });
+
+test('adding to collection should trigger addViewForModel', function (t) {
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView
+    });
+    cv.render();
+    var firstView = cv.views[0];
+    var firstEl = firstView && firstView.el;
+
+    cv.on('addViewForModel', function (view) {
+        t.equal(view.model.name, 'henrik');
+        t.end();
+    });
+
+    coll.add({name: 'henrik', id: 4});
+});
+
+test('removing from collection should trigger removeViewForModel', function (t) {
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView
+    });
+    cv.render();
+    t.equal(cv.views.length, 3);
+    var firstView = cv.views[0];
+
+    cv.on('removeViewForModel', function (view) {
+        t.equal(view.model.name, firstView.model.name);
+        t.end();
+    });
+
+    coll.remove(coll.at(0));
+});
