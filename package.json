@@ -28,14 +28,11 @@
     "ampersand-collection": "^1.4.3",
     "ampersand-model": "^5.0.0",
     "ampersand-view": "^7.2.0",
-    "browserify": "^9.0.3",
     "jshint": "~2.5.1",
-    "phantomjs": "^1.9.7-15",
+    "phantomjs": "^1.9.19",
     "precommit-hook": "~1.0.2",
-    "run-browser": "~1.3.1",
-    "tap-spec": "^0.2.0",
-    "tape": "~2.13.2",
-    "tape-run": "~0.1.1"
+    "tape": "^4.4.0",
+    "zuul": "^3.9.0"
   },
   "keywords": [
     "backbone",
@@ -50,23 +47,8 @@
     "url": "git://github.com/AmpersandJS/ampersand-collection-view"
   },
   "scripts": {
-    "start": "run-browser test/index.js",
-    "test": "browserify test/index.js | tape-run | tap-spec"
-  },
-  "testling": {
-    "files": "test/index.js",
-    "browsers": [
-      "ie/8..latest",
-      "firefox/17..latest",
-      "firefox/nightly",
-      "chrome/22..latest",
-      "chrome/canary",
-      "opera/12..latest",
-      "opera/next",
-      "safari/5.1..latest",
-      "ipad/6.0..latest",
-      "iphone/6.0..latest",
-      "android-browser/4.2..latest"
-    ]
+    "start": "zuul --local -- test/index.js",
+    "test": "zuul --phantom -- test/index.js",
+    "test-ci": "zuul -- test/index.js"
   }
 }
