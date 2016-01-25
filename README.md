@@ -12,10 +12,6 @@ This is the view used by main ampersand-view for `renderCollection`.
 npm install ampersand-collection-view
 ```
 
-## browser compatibility
-
-[![testling badge](https://ci.testling.com/AmpersandJS/ampersand-collection-view.png)](https://ci.testling.com/AmpersandJS/ampersand-collection-view)
-
 ## API Reference
 
 ### views
