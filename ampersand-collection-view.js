@@ -1,9 +1,9 @@
 /*$AMPERSAND_VERSION*/
-var assign = require('lodash.assign');
-var invoke = require('lodash.invoke');
-var pick = require('lodash.pick');
-var find = require('lodash.find');
-var difference = require('lodash.difference');
+var assign = require('lodash/assign');
+var invokeMap = require('lodash/invokeMap');
+var pick = require('lodash/pick');
+var find = require('lodash/find');
+var difference = require('lodash/difference');
 var Events = require('ampersand-events');
 var ampExtend = require('ampersand-class-extend');
 
@@ -36,7 +36,7 @@ assign(CollectionView.prototype, Events, {
         return this;
     },
     remove: function () {
-        invoke(this.views, 'remove');
+        invokeMap(this.views, 'remove');
         this.stopListening();
     },
     _getViewByModel: function (model) {
