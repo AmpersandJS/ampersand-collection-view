@@ -4,6 +4,7 @@ var invokeMap = require('lodash/invokeMap');
 var pick = require('lodash/pick');
 var find = require('lodash/find');
 var difference = require('lodash/difference');
+var bind = require('lodash/bind');
 var Events = require('ampersand-events');
 var ampExtend = require('ampersand-class-extend');
 
@@ -126,16 +127,16 @@ assign(CollectionView.prototype, Events, {
         }
     },
     _renderAll: function () {
-        this.collection.each(this._addViewForModel, this);
+        this.collection.each(bind(this._addViewForModel, this));
         if (this.views.length === 0) {
             this._renderEmptyView();
         }
     },
     _rerenderAll: function (collection, options) {
         options = options || {};
-        this.collection.each(function (model) {
+        this.collection.each(bind(function (model) {
             this._addViewForModel(model, this, assign(options, {rerender: true}));
-        }, this);
+        }, this));
     },
     _renderEmptyView: function() {
         if (this.emptyView && !this.renderedEmptyView) {
@@ -144,7 +145,7 @@ assign(CollectionView.prototype, Events, {
         }
     },
     _reset: function () {
-        var newViews = this.collection.map(this._getOrCreateByModel, this);
+        var newViews = this.collection.map(bind(this._getOrCreateByModel, this));
 
         //Remove existing views from the ui
         var toRemove = difference(this.views, newViews);
