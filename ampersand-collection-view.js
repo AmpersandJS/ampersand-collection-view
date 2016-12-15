@@ -62,7 +62,7 @@ assign(CollectionView.prototype, Events, {
             return;
         }
         if (this.renderedEmptyView) {
-            this.renderedEmptyView.remove();
+            this._removeView(this.renderedEmptyView);
             delete this.renderedEmptyView;
         }
         var view = this._getOrCreateByModel(model, {containerEl: this.el});
@@ -75,19 +75,15 @@ assign(CollectionView.prototype, Events, {
     _insertViewAtIndex: function (view) {
         if (!view.insertSelf) {
             var pos = this.collection.indexOf(view.model);
-            var modelToInsertBefore, viewToInsertBefore;
+            pos = this.reverse ? pos - 1 : pos + 1;
 
-            if (this.reverse) {
-                modelToInsertBefore = this.collection.at(pos - 1);
-            } else {
-                modelToInsertBefore = this.collection.at(pos + 1);
-            }
+            var modelToInsertBefore = this.collection.at(pos);
 
-            viewToInsertBefore = this._getViewByModel(modelToInsertBefore);
+            var viewToInsertBefore = this._getViewByModel(modelToInsertBefore);
 
             // FIX IE bug (https://developer.mozilla.org/en-US/docs/Web/API/Node.insertBefore)
             // "In Internet Explorer an undefined value as referenceElement will throw errors, while in rest of the modern browsers, this works fine."
-            if(viewToInsertBefore) {
+            if (viewToInsertBefore) {
                 this.el.insertBefore(view.el, viewToInsertBefore && viewToInsertBefore.el);
             } else {
                 this.el.appendChild(view.el);
@@ -114,9 +110,7 @@ assign(CollectionView.prototype, Events, {
             // to give user option of gracefully destroying.
             view = this.views.splice(index, 1)[0];
             this._removeView(view);
-            if (this.views.length === 0) {
-                this._renderEmptyView();
-            }
+            this._renderEmptyView();
         }
     },
     _removeView: function (view) {
@@ -128,9 +122,7 @@ assign(CollectionView.prototype, Events, {
     },
     _renderAll: function () {
         this.collection.each(bind(this._addViewForModel, this));
-        if (this.views.length === 0) {
-            this._renderEmptyView();
-        }
+        this._renderEmptyView();
     },
     _rerenderAll: function (collection, options) {
         options = options || {};
@@ -139,9 +131,9 @@ assign(CollectionView.prototype, Events, {
         }, this));
     },
     _renderEmptyView: function() {
-        if (this.emptyView && !this.renderedEmptyView) {
-            var view = this.renderedEmptyView = new this.emptyView({parent: this});
-            this.el.appendChild(view.render().el);
+        if (this.views.length === 0 && this.emptyView && !this.renderedEmptyView) {
+            this.renderedEmptyView = new this.emptyView({parent: this});
+            this.el.appendChild(this.renderedEmptyView.render().el);
         }
     },
     _reset: function () {
@@ -154,9 +146,7 @@ assign(CollectionView.prototype, Events, {
         //Rerender the full list with the new views
         this.views = newViews;
         this._rerenderAll();
-        if (this.views.length === 0) {
-            this._renderEmptyView();
-        }
+        this._renderEmptyView();
     }
 });
 
