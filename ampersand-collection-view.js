@@ -71,6 +71,7 @@ assign(CollectionView.prototype, Events, {
         } else {
             this._insertViewAtIndex(view);
         }
+        this.trigger('model-view:added', view);
     },
     _insertViewAtIndex: function (view) {
         if (!view.insertSelf) {
@@ -112,6 +113,7 @@ assign(CollectionView.prototype, Events, {
             this._removeView(view);
             this._renderEmptyView();
         }
+        this.trigger('model-view:removed', view);
     },
     _removeView: function (view) {
         if (view.animateRemove) {

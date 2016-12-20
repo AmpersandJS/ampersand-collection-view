@@ -568,3 +568,46 @@ test('should set `parent` on emptyView', function(t) {
     cv.render();
     t.equal(cv.renderedEmptyView.parent, cv);
 });
+
+test('adding to collection should trigger addViewForModel after appending', function (t) {
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView
+    });
+    cv.render();
+
+    cv.on('model-view:added', function (view) {
+        t.equal(view.model.name, 'henrik');
+        t.ok(/henrik/.test(cv.el.textContent), 
+            'expect ' + cv.el.textContent + ' to match /henrik/');
+        t.end();
+    });
+
+    coll.add({name: 'henrik', id: 4});
+});
+
+test('removing from collection should trigger removeViewForModel after removal', function (t) {
+    var coll = new Collection(data);
+    var div = document.createElement('div');
+    var cv = new CollectionView({
+        el: div,
+        collection: coll,
+        view: ItemView
+    });
+    cv.render();
+    t.equal(cv.views.length, 3);
+    var firstView = cv.views[0];
+    var firstNamePattern = new RegExp(firstView.model.name); 
+
+    cv.on('model-view:removed', function (view) {
+        t.equal(view.model.name, firstView.model.name);
+        t.notOk(firstNamePattern.test(cv.el.textContent), 
+            'expect ' + cv.el.textContent + ' not to match ' + firstNamePattern);
+        t.end();
+    });
+
+    coll.remove(coll.at(0));
+});
